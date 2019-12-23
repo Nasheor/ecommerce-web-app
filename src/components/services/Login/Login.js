@@ -1,13 +1,13 @@
 import axios from 'axios'
 
-
 export default{
     data() {
         return {
             uname: '',
             password: '',
             admin: false,
-            endpoint: "http://localhost:8080/login"
+            endpoint: "http://localhost:8080/login",
+            isSuccess: false,
         }
     },
     methods: {
@@ -24,7 +24,11 @@ export default{
                     'content-type': 'application/json',
                 },}).then(response => {
                     // eslint-disable-next-line no-console
-                    console.log(response);
+                    if (response.data.r) {
+                        this.isSuccess = true;
+                    }
+                    this.$store.commit("switchLoggedInStatus", this.isSuccess);
+                    this.$store.commit("isAdmin", this.admin);
                 })
                 .catch(function(error) {
                     // eslint-disable-next-line no-console
